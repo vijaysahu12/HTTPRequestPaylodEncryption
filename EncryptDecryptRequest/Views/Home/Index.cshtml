@@ -1,0 +1,88 @@
+﻿@{
+    ViewBag.Title = "Encryt/Decrypt Request";
+}
+
+<div class="jumbotron">
+    <h3>Encryption/Decryption HTTP Reqeust</h3>
+    <br />
+    <div class="row">
+        <div class="col-lg-4">
+            <input type="text" class="form-control input-group" maxlength="12" id="txtMessageToEncrypt" placeholder="Enter the text for encryption" />
+        </div>
+        <div class="col-lg-4">
+            <button id="btnEncryptUsingjQuery" class="btn btn-primary btn-sm">Encrypt Using jQuery</button>
+        </div>
+
+    </div>
+    <br />
+    <br />
+    <div class="clearfix"></div>
+    <div class="row">
+        <div class="col-lg-4">
+            <input type="text" readonly class="form-control input-group" id="txtDecryptedMessage" placeholder="Copy the encrypted text from top right field" />
+        </div>
+        <div class="col-lg-4">
+            <button id="btnValidateFromServer" class="btn btn-primary btn-sm">Decrypt From Server</button>
+        </div>
+        <div class="col-lg-4"><input placeholder="Encrypted values using jQuery" type="text" readonly class="form-control input-group" id="txtEncryptContent" /></div>
+    </div>
+
+</div>
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/aes.js"></script>
+
+<script>
+    var key = CryptoJS.enc.Utf8.parse('8080808080808080');
+    var iv = CryptoJS.enc.Utf8.parse('8080808080808080');
+
+    $(document).ready(function () {
+        console.log('document ready');
+        //$('#HDUser').val(encryptedlogin);
+    });
+
+    $("#btnEncryptUsingjQuery").on("click", function () {
+        var textValue = $('#txtMessageToEncrypt').val();
+        $('#txtDecryptedMessage').val(EcnryptThePayloads(textValue));
+        $("#txtEncryptContent").val("");
+    });
+
+
+    $("#btnValidateFromServer").on('click', function () {
+        AjaxCall($('#txtDecryptedMessage').val());
+    });
+
+    function EcnryptThePayloads(payloadMessage) {
+
+        var encryptedValue = CryptoJS.AES.encrypt(CryptoJS.enc.Utf8.parse(payloadMessage), key, {
+            keySize: 128 / 8,
+            iv: iv,
+            mode: CryptoJS.mode.CBC,
+            padding: CryptoJS.pad.Pkcs7
+        });
+
+        return encryptedValue;
+    }
+
+    function DecryptThePayloads() {
+
+    }
+
+    function AjaxCall(msg) {
+        var url = 'https://localhost:44396/Home/Message?msg=' + msg;
+
+        $.ajax({
+            url: url,
+            async: false,
+            contentType: 'application/json',
+            success: function (data) {
+                debugger;
+                $("#txtEncryptContent").val(data);
+            },
+            error: function () {
+                debugger;
+            }
+        });
+    }
+</script>
+

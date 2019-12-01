@@ -7,7 +7,7 @@
     <br />
     <div class="row">
         <div class="col-lg-4">
-            <input type="text" class="form-control input-group" maxlength="12" id="txtMessageToEncrypt" placeholder="Enter the text for encryption" />
+            <input type="text" class="form-control input-group" maxlength="20" id="txtMessageToEncrypt" placeholder="Enter the text for encryption" />
         </div>
         <div class="col-lg-4">
             <button id="btnEncryptUsingjQuery" class="btn btn-primary btn-sm">Encrypt Using jQuery</button>
@@ -55,7 +55,7 @@
     function EcnryptThePayloads(payloadMessage) {
 
         var encryptedValue = CryptoJS.AES.encrypt(CryptoJS.enc.Utf8.parse(payloadMessage), key, {
-            keySize: 128 / 8,
+            keySize: 128,
             iv: iv,
             mode: CryptoJS.mode.CBC,
             padding: CryptoJS.pad.Pkcs7
@@ -69,17 +69,36 @@
     }
 
     function AjaxCall(msg) {
-        var url = 'https://localhost:44396/Home/Message?msg=' + msg;
+        debugger;
+        //var url = 'https://localhost:44396/Home/Message?msg=' + msg;
+        var url = 'https://localhost:44396/Home/Message';
+        //$.ajax({
+        //    url: url,
+        //    async: false,
+        //    contentType: 'application/json',
+        //    success: function (data) {
+        //        debugger;
+        //        $("#txtEncryptContent").val(data);
+        //    },
+        //    error: function () {
+        //        debugger;
+        //    }
+        //});
+        var msgData = {};
+        msgData.Message = msg
 
         $.ajax({
             url: url,
+            type: 'POST',
+            data: "{'Message': '" + msg + "'}",
             async: false,
-            contentType: 'application/json',
+            dataType: "text",
+            contentType: "application/json; charset=utf-8",
             success: function (data) {
                 debugger;
                 $("#txtEncryptContent").val(data);
             },
-            error: function () {
+            error: function (data, dataa , ddddaata) {
                 debugger;
             }
         });

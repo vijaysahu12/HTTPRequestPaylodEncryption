@@ -1,8 +1,4 @@
 ﻿using EncryptDecryptRequest.EncryptionHelper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace EncryptDecryptRequest.Controllers
@@ -29,10 +25,10 @@ namespace EncryptDecryptRequest.Controllers
         }
 
 
-        [HttpGet]
-        public string Message(string msg)
+        [HttpPost]
+        public string Message(Models.MessageModel msg)
         {
-            var objEncryptDecrypt = EncryptinDecryptionHelperFile.DecryptStringAES(msg);
+            var objEncryptDecrypt = EncryptinDecryptionHelperFile.DecryptStringAES(msg.Message);
             
             return objEncryptDecrypt;
         }
